@@ -5,7 +5,7 @@ import com.tak8997.githubreposearch.data.model.Repo
 import com.tak8997.githubreposearch.data.remote.ApiService
 import com.tak8997.githubreposearch.data.safeApiCall
 
-private const val PER_PAGE = 20
+private const val PER_PAGE = 30
 
 interface RepoRepository {
     suspend fun fetchRepos(query: String, page: Int): Result<List<Repo>>

@@ -55,6 +55,7 @@ class RepoSearchViewModel(
 
     private fun searchRepos(query: String, page: Int) {
         viewModelScope.launch {
+            loading.value = true
             when (val repoResult = repository.fetchRepos(query, page)) {
                 is Result.Success -> {
                     repos.value = repoResult.data ?: emptyList()
@@ -63,6 +64,7 @@ class RepoSearchViewModel(
                     error.value = repoResult.exception.message
                 }
             }
+            loading.value = false
         }
     }
 }
