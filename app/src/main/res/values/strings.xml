@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GithubRepoSearch</string>
+    <string name="github_repo_search">깃헙 레포지토리를 검색해주세요.</string>
 </resources>
