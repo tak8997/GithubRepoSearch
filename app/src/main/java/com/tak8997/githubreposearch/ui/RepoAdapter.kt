@@ -8,7 +8,7 @@ import com.tak8997.githubreposearch.databinding.ItemRepoBinding
 
 class RepoAdapter : RecyclerView.Adapter<RepoAdapter.ViewHolder>() {
 
-    private val items = mutableListOf<Repo>()
+    val items = mutableListOf<Repo>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemRepoBinding.inflate(

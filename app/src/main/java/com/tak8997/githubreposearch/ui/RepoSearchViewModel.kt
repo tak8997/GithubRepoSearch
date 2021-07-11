@@ -20,7 +20,8 @@ class RepoSearchViewModel(
 
     private val query = savedStateHandle.getLiveData<Pair<String, Int>>(REPO_QUERY)
 
-    val repos = MutableLiveData<List<Repo>>()
+    val repos = MutableLiveData<List<Repo>>(emptyList())
+    val loading = MutableLiveData(false)
     val error = SingleLiveEvent<String>()
 
     init {
@@ -44,9 +45,17 @@ class RepoSearchViewModel(
         savedStateHandle[REPO_QUERY] = Pair(title, page)
     }
 
+    fun fetchMore(query: String, page: Int) {
+        searchRepos(query, page)
+    }
+
+    fun onSaveInstanceState(items: MutableList<Repo>) {
+        repos.value = items
+    }
+
     private fun searchRepos(query: String, page: Int) {
         viewModelScope.launch {
-            when(val repoResult = repository.fetchRepos(query, page)) {
+            when (val repoResult = repository.fetchRepos(query, page)) {
                 is Result.Success -> {
                     repos.value = repoResult.data ?: emptyList()
                 }

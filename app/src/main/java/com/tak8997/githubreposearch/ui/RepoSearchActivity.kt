@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tak8997.githubreposearch.R
 import com.tak8997.githubreposearch.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.getStateViewModel
@@ -45,6 +46,11 @@ class RepoSearchActivity : AppCompatActivity() {
         setupRepoRecycler()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        viewModel.onSaveInstanceState(repoAdapter.items)
+    }
+
     private fun setupRepoEditListener() {
         binding.etRepoSearch.addTextChangedListener {
             val query = it?.toString() ?: ""
@@ -60,6 +66,24 @@ class RepoSearchActivity : AppCompatActivity() {
         with(binding.rvRepo) {
             layoutManager = LinearLayoutManager(this@RepoSearchActivity)
             adapter = repoAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val layoutManager = layoutManager
+                    if (layoutManager is LinearLayoutManager) {
+                        val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                        val visibleItemCount = layoutManager.childCount
+                        val totalItemCount = layoutManager.itemCount
+
+                        if (visibleItemCount + firstVisibleItemPosition >= totalItemCount
+                            && firstVisibleItemPosition >= 0
+                            && viewModel.loading.value == false
+                        ) {
+                            viewModel.fetchMore(binding.etRepoSearch.text.toString(), ++page)
+                        }
+                    }
+                }
+            })
         }
     }
 

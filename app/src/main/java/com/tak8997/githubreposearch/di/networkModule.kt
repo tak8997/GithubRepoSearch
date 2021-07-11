@@ -1,6 +1,5 @@
 package com.tak8997.githubreposearch.di
 
-import com.tak8997.githubreposearch.data.remote.ApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -10,14 +9,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 private const val BASE_URL = "https://api.github.com"
 
-val networkModule = module {
+val networkModules = module {
     single { provideOkHttp() }
     single { provideRetrofit(get(), BASE_URL) }
-    single { provideFeedService(get()) }
-}
-
-private fun provideFeedService(retrofit: Retrofit): ApiService {
-    return retrofit.create(ApiService::class.java)
 }
 
 private fun provideOkHttp(): OkHttpClient {

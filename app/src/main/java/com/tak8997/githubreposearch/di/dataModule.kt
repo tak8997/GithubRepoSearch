@@ -5,5 +5,5 @@ import com.tak8997.githubreposearch.data.repository.RepoRepository
 import org.koin.dsl.module
 
 val dataModules = module {
-    single<RepoRepository> { RepoDataRepository() }
+    single<RepoRepository> { RepoDataRepository(get()) }
 }
